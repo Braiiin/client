@@ -13,13 +13,15 @@ class Config:
 	
 	DEBUG = False
 	TESTING = False
-	PORT = 8000
-	HOST = '127.0.0.1'
-	SCHEME = 'http'
 	SECRET_KEY = 'flask+mongoengine=<3'
-	STATIC_PATH = 'static'
 	SESSION_STORE = 'session'
-	LIVE = []
+	LIVE = ['public', 'sphere']
+	STATIC_PATH = 'static'
+	
+	INIT = {
+		'port': 8000,
+		'host': '127.0.0.1',
+	}
 	
 	
 class ProductionConfig(Config):

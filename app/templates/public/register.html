@@ -1,0 +1,10 @@
+Register
+
+<form method="POST">
+    {% include "form.html" %}
+    {% if message %}
+    {{ message }}
+    {% endif %}
+    <a href="{{ url_for('public.login') }}">login</a>
+    <a href="/">back to site</a>
+</form>
