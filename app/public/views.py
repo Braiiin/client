@@ -1,5 +1,5 @@
 from app import bcrypt
-from app.lib.core import User
+from app.libs.core import User
 from app.public.forms import LoginForm, RegisterForm
 from flask import Blueprint, render_template, url_for, request
 from flask_login import login_user, redirect
