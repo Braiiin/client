@@ -37,20 +37,20 @@ class Logic:
 			raise LogicException('%s\n- - "%s %s" %d -' % (
 				json['message'], method.upper(), self.response.url, json['status']))
 		return json['data']
-	
+
 	# TODO: do we need these? call() is invoked directly
 	def post(self, obj, **data):
 		"""Post request"""
 		return self.call('post', obj, data)
-		
+
 	def get(self, obj, **data):
 		"""Get request"""
 		return self.call('get', obj, data)
-		
+
 	def put(self, obj, **data):
 		"""Put request"""
 		return self.call('put', obj, data)
-		
+
 	def delete(self, obj, **data):
 		"""Delete request"""
 		return self.call('delete', obj, data)
@@ -87,13 +87,15 @@ class Entity:
 		response = logic.call(method, self, data or self._data, **kwargs)
 		to_date = datetime.datetime.fromtimestamp
 		_values = {
-			'_id': lambda v: v['$oid'],
-			'created_at': lambda v: v['$date'],  #TODO: fix to_date
-		    'updated_at': lambda v: v['$date'],
+			'$oid': lambda v: v['$oid'],
+			# '$date': lambda v: to_date(v['$date']),  #TODO: fix to_date
+		    '$date': lambda v: v['$date']
 		}
 		_keys, identity = {'_id': 'id'}, lambda x: x
-		data = {_keys.get(k, k): _values.get(k, identity)(v) for k, v
-		        in response.items()}
+		_get_key = lambda v: list(v.keys())[0]
+		_process = lambda v: _values.get(_get_key(v), identity)(v) \
+			if isinstance(v, dict) else v
+		data = {_keys.get(k, k): _process(v) for k, v in response.items()}
 		logger.info(data)
 		return self.load(**data)
 

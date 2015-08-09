@@ -24,7 +24,7 @@ class User(Entity):
 	
 	def authenticate(self, **kwargs):
 		"""authenticate by creating session and loading user object"""
-		self.load(**kwargs).get()
+		return self.load(**kwargs).get()
 	
 	
 class Session(Entity):

@@ -37,10 +37,8 @@ def login():
 		user = User(username=form.username.data)
 		if request.method == 'POST' and form.validate():
 			user.get()
-			nonce = hashing.hash_value(str(datetime.now()))
 			password = hashing.hash_value(form.password.data, salt=user.salt)
-			password = hashing.hash_value(password, salt=nonce)
-			user.authenticate(password=password, nonce=nonce, salt=None)
+			user.authenticate(password=password, salt=None)
 			if user.get_id() and user.is_authenticated() and user.is_active():
 				if login_user(user):
 					return redirect(request.args.get('next') or url_for('sphere.home'))
@@ -58,13 +56,14 @@ def register():
 		form = RegisterForm(request.form)
 		if request.method == 'POST' and form.validate():
 			salt = hashing.hash_value(str(datetime.now()))
+			password = hashing.hash_value(form.password.data, salt=salt)
 			user = User(
 				name=form.name.data,
 				email=form.email.data,
-				password=hashing.hash_value(form.password.data, salt=salt),
+				password=password,
 			    salt=salt,
 			    username=form.username.data
-			).create()
+			).create().authenticate(password=password, salt=None)
 			if login_user(user):
 				return redirect(url_for('sphere.home'))
 			else:
@@ -78,7 +77,8 @@ def register():
 def load_user(access_token):
 	"""Loading a user from saved userId"""
 	session = Session(access_token=access_token).get()
-	user = session.user
+	user = User(id=session.user, access_token=access_token).get()
+	session['user'] = user
 	if user.is_active():
 		return user
 	else:
