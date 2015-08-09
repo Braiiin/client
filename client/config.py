@@ -13,10 +13,11 @@ class Config:
 	
 	DEBUG = False
 	TESTING = False
-	SECRET_KEY = 'flask+mongoengine=<3'
+	SECRET_KEY = 'flask+braiiin=<3'
 	SESSION_STORE = 'session'
 	LIVE = ['public', 'sphere']
 	STATIC_PATH = 'static'
+	HASHING_ROUNDS = 15
 	
 	INIT = {
 		'port': 8000,
@@ -26,12 +27,13 @@ class Config:
 	
 class ProductionConfig(Config):
 	"""Production vars"""
-	pass
+	LOGIC_URI = ''
 
 
 class DevelopmentConfig(Config):
 	"""For local runs"""
 	DEBUG = True
+	LOGIC_URI = 'http://localhost:8001'
 	
 	
 class TestConfig(Config):

@@ -1,6 +1,6 @@
 pytest==2.7.1
 flask==0.10.1
-flask-bcrypt==0.6.2
 flask-login==0.2.11
 wtforms==2.0.2
 requests==2.7.0
+flask-hashing==1.1

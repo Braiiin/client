@@ -10,16 +10,17 @@ import importlib
 import logging
 
 from flask import Flask
+from flask_hashing import Hashing
 from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
 
 # login-management
 login_manager = LoginManager()
-bcrypt = Bcrypt()
+hashing = Hashing()
 
-logger = logging.getLogger('API')
+logger = logging.getLogger('Client')
+logging.basicConfig(level=logging.DEBUG)
 
-root = 'app'
+root = 'client'
 
 
 def create_app(config='DevelopmentConfig', **configs):
@@ -36,8 +37,8 @@ def create_app(config='DevelopmentConfig', **configs):
 	# initialize Flask-Login with app
 	login_manager.init_app(app)
 	
-	# initialize encryption mechanism
-	bcrypt.init_app(app)
+	# initialize hash mechanism
+	hashing.init_app(app)
 	
 	# register all blueprints
 	for view in app.config['LIVE']:
