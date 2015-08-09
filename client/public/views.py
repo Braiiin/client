@@ -3,7 +3,7 @@ from random import random
 import functools
 from client import hashing, login_manager
 from client.exceptions import LogicException
-from client.libs.core import User
+from client.libs.core import User, Session
 from client.public.forms import LoginForm, RegisterForm
 from flask import Blueprint, render_template, url_for, request, current_app
 from flask_login import login_user, redirect, current_user, logout_user
@@ -75,9 +75,10 @@ def register():
 
 
 @login_manager.user_loader
-def load_user(userId):
+def load_user(access_token):
 	"""Loading a user from saved userId"""
-	user = User(id=userId).get()
+	session = Session(access_token=access_token).get()
+	user = session.user
 	if user.is_active():
 		return user
 	else:

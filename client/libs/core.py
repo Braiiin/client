@@ -16,12 +16,11 @@ class User(Entity):
 
 	def is_anonymous(self):
 		"""If the user is not logged in"""
-		return self.get_id() is None
+		return self.access_token is None
 
 	def get_id(self):
 		"""ID for the current user object"""
-		print(str(self.id))
-		return str(self.id) if hasattr(self, 'id') else None
+		return self.access_token
 	
 	def authenticate(self, **kwargs):
 		"""authenticate by creating session and loading user object"""
