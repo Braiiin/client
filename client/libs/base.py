@@ -99,7 +99,7 @@ class Entity:
 		logger.info(data)
 		return self.load(**data)
 
-	def create(self):
+	def post(self):
 		"""Create object"""
 		return self.call('post')
 
@@ -114,3 +114,7 @@ class Entity:
 	def delete(self):
 		"""Delete the object"""
 		return self.call('delete')
+	
+	def get_or_create(self):
+		"""Get or create an object"""
+		return self.call('get', func='get_or_create')
