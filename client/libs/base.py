@@ -91,7 +91,7 @@ class Entity:
 			if isinstance(v, dict) else v
 		_process_dict = lambda response: {
 			_keys.get(k, k): _process(v) for k, v in response.items()}
-		if isinstance(response, dict):
+		if isinstance(response, list):
 			data = []
 			for item in response:
 				item = _process_dict(item) if isinstance(item, dict) else item
