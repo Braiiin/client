@@ -1,4 +1,5 @@
 import datetime
+import json
 from client.exceptions import LogicException, ClientException
 from flask import current_app
 from client import logger
@@ -64,16 +65,8 @@ class Entity:
 
 	def __init__(self, **kwargs):
 		self.load(**kwargs)
-	
-	def load(self, force=False, **kwargs):
-		"""Loads all kwargs into object as attributes"""
-		for k, v in kwargs.items():
-			attr = getattr(self, k, None)
-			if callable(attr) and not force:
-				raise ClientException(
-					'Cannot override method "%s", use force=True' % k)
-			setattr(self, k, v)
-		return self
+		
+	# API functionality
 	
 	@property
 	def _data(self):
@@ -106,10 +99,18 @@ class Entity:
 	def get(self):
 		"""Get object"""
 		return self.call('get')
+	
+	def fetch(self):
+		"""Fetch all objects that match the query"""
+		return self.call('get', func='fetch')
 
-	def save(self):
+	def put(self):
 		"""Saves the object"""
 		return self.call('put')
+	
+	def save(self):
+		"""Alias for put"""
+		return self.put()
 		
 	def delete(self):
 		"""Delete the object"""
@@ -118,3 +119,19 @@ class Entity:
 	def get_or_create(self):
 		"""Get or create an object"""
 		return self.call('get', func='get_or_create')
+
+	# Utilities
+
+	def load(self, force=False, **kwargs):
+		"""Loads all kwargs into object as attributes"""
+		for k, v in kwargs.items():
+			attr = getattr(self, k, None)
+			if callable(attr) and not force:
+				raise ClientException(
+					'Cannot override method "%s", use force=True' % k)
+			setattr(self, k, v)
+		return self
+	
+	def to_json(self):
+		"""Return jsonified object"""
+		return json.dumps(self._data)

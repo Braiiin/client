@@ -38,4 +38,5 @@ class DevelopmentConfig(Config):
 	
 class TestConfig(Config):
 	"""For automated testing"""
+	LOGIC_URI = 'http://localhost:8001'
 	TESTING = True
