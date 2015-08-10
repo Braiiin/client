@@ -92,7 +92,10 @@ class Entity:
 		_process_dict = lambda response: {
 			_keys.get(k, k): _process(v) for k, v in response.items()}
 		if isinstance(response, dict):
-			data = [_process_dict(d) for d in response]
+			data = []
+			for item in response:
+				item = _process_dict(item) if isinstance(item, dict) else item
+				data.append(item)
 		else:
 			data = _process_dict(response)
 			self.load(**data)
