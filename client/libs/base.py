@@ -75,6 +75,7 @@ class Entity:
 			k: v for k, v in vars(self).items()
 			if not k.startswith('_') and not callable(v)}
 	
+	# TODO: clean this up
 	def call(self, method, data=None, **kwargs):
 		"""calls the logic tier"""
 		response = logic.call(method, self, data or self._data, **kwargs)
@@ -88,9 +89,15 @@ class Entity:
 		_get_key = lambda v: list(v.keys())[0]
 		_process = lambda v: _values.get(_get_key(v), identity)(v) \
 			if isinstance(v, dict) else v
-		data = {_keys.get(k, k): _process(v) for k, v in response.items()}
+		_process_dict = lambda response: {
+			_keys.get(k, k): _process(v) for k, v in response.items()}
+		if isinstance(response, dict):
+			data = [_process_dict(d) for d in response]
+		else:
+			data = _process_dict(response)
+			self.load(**data)
 		logger.info(data)
-		return self.load(**data)
+		return data
 
 	def post(self):
 		"""Create object"""
