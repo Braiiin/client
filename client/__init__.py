@@ -39,10 +39,14 @@ def create_app(config='DevelopmentConfig', **configs):
 	
 	# initialize hash mechanism
 	hashing.init_app(app)
-	
-	# register all blueprints
-	for view in app.config['LIVE']:
-		mod = importlib.import_module('%s.%s.views' % (root, view))
-		app.register_blueprint(getattr(mod, view))
+
+	# Setup blueprints
+	def register_blueprints():
+		for view in app.config['LIVE']:
+			mod = importlib.import_module('%s.%s.views' % (root, view))
+			app.register_blueprint(getattr(mod, view))
+
+	app.register_blueprints = register_blueprints
+	app.register_blueprints()
 	
 	return app
