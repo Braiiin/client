@@ -15,7 +15,7 @@ class Config:
 	TESTING = False
 	SECRET_KEY = 'flask+braiiin=<3'
 	SESSION_STORE = 'session'
-	LIVE = ['public', 'sphere']
+	LIVE = []
 	STATIC_PATH = 'static'
 	HASHING_ROUNDS = 15
 	

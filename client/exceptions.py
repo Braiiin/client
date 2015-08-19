@@ -1,5 +1,6 @@
 from client import logger
 
+
 class ClientException(Exception):
 	"""general exception for all client errors"""
 	message = None
