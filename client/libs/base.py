@@ -63,6 +63,9 @@ logic = Logic()
 class Entity:
 	"""Universal entity, abstracts communication with logic tier"""
 
+	_response = None
+	_response_data = None
+
 	def __init__(self, **kwargs):
 		self.load(**kwargs)
 		
@@ -99,16 +102,20 @@ class Entity:
 		else:
 			data = _process_dict(response)
 			self.load(**data)
+		self._response = response
+		self._response_data = data
 		logger.info(data)
 		return data
 
 	def post(self):
 		"""Create object"""
-		return self.call('post')
+		self.call('post')
+		return self
 
 	def get(self):
 		"""Get object"""
-		return self.call('get')
+		self.call('get')
+		return self
 	
 	def fetch(self):
 		"""Fetch all objects that match the query"""
@@ -116,7 +123,8 @@ class Entity:
 
 	def put(self):
 		"""Saves the object"""
-		return self.call('put')
+		self.call('put')
+		return self
 	
 	def save(self):
 		"""Alias for put"""
@@ -128,7 +136,8 @@ class Entity:
 	
 	def get_or_create(self):
 		"""Get or create an object"""
-		return self.call('get', func='get_or_create')
+		self.call('get', func='get_or_create')
+		return self
 
 	# Utilities
 
