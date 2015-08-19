@@ -8,9 +8,7 @@ front-end visuals
 1. Make sure Python3, Pip, and Mongodb are installed.
 1. Create new virtaulenv named "env" `python3 -m venv env`.
 1. Launch virtualenv `source env/bin/activate`.
-1. Create mongodb datastore `mkdir env/db`.
 1. Install requirements `pip3 install -r requirements.txt`.
-1. Launch datastore. `service mongodb start`.
 1. Launch service. `python3 run.py`.
 
 *For subsequent runs, after installation, you can use `source activate.sh`.*
