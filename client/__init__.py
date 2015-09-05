@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 root = 'client'
 
 
-def create_app(_name_=None, config='DevelopmentConfig', **configs):
+def create_app(_name_=None, root=root, config='DevelopmentConfig', **configs):
 	"""
 	App factory
 	:param config: name of Config class from config.py
