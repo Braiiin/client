@@ -23,7 +23,7 @@ logging.basicConfig(level=logging.DEBUG)
 root = 'client'
 
 
-def create_app(config='DevelopmentConfig', **configs):
+def create_app(config='DevelopmentConfig', root=root, **configs):
 	"""
 	App factory
 	:param config: name of Config class from config.py
@@ -36,7 +36,7 @@ def create_app(config='DevelopmentConfig', **configs):
 
 	# initialize Flask-Login with app
 	login_manager.init_app(app)
-	
+
 	# initialize hash mechanism
 	hashing.init_app(app)
 
@@ -48,5 +48,5 @@ def create_app(config='DevelopmentConfig', **configs):
 
 	app.register_blueprints = register_blueprints
 	app.register_blueprints()
-	
+
 	return app

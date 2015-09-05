@@ -8,23 +8,26 @@ import requests
 
 class Logic:
 	"""Handles communication with logic tier and auth"""
-	
+
 	access_token = None
 	response = None
 	version = 'v1'
-	
+
+	def __init__(logic=None):
+		self.logic = logic or current_app.config['LOGIC_URI']
+
 	def call(self, method, obj, data, func=None):
 		"""Assemble URI and make request"""
 		uri = '{logic}/api/{v}/{obj}'.format(
-			logic=current_app.config['LOGIC_URI'],
-			v=self.version, 
+			logic=self.logic,
+			v=self.version,
 			obj=obj.__class__.__name__.lower())
 		if hasattr(obj, 'id'):
 			uri += '/%s' % obj.id
 		if func:
 			uri += '/%s' % func
 		return self.request(method, uri, data, self.access_token)
-	
+
 	def request(self, method, uri, data, access_token=None):
 		"""Makes request with specified method, data, and optional access token"""
 		data = data or {}
@@ -65,16 +68,16 @@ class Entity:
 
 	def __init__(self, **kwargs):
 		self.load(**kwargs)
-		
+
 	# API functionality
-	
+
 	@property
 	def _data(self):
 		"""Compiles data for this object"""
 		return {
 			k: v for k, v in vars(self).items()
 			if not k.startswith('_') and not callable(v)}
-	
+
 	# TODO: clean this up
 	def call(self, method, data=None, **kwargs):
 		"""calls the logic tier"""
@@ -109,7 +112,7 @@ class Entity:
 	def get(self):
 		"""Get object"""
 		return self.call('get')
-	
+
 	def fetch(self):
 		"""Fetch all objects that match the query"""
 		return self.call('get', func='fetch')
@@ -117,15 +120,15 @@ class Entity:
 	def put(self):
 		"""Saves the object"""
 		return self.call('put')
-	
+
 	def save(self):
 		"""Alias for put"""
 		return self.put()
-		
+
 	def delete(self):
 		"""Delete the object"""
 		return self.call('delete')
-	
+
 	def get_or_create(self):
 		"""Get or create an object"""
 		return self.call('get', func='get_or_create')
@@ -141,7 +144,7 @@ class Entity:
 					'Cannot override method "%s", use force=True' % k)
 			setattr(self, k, v)
 		return self
-	
+
 	def to_json(self):
 		"""Return jsonified object"""
 		return json.dumps(self._data)
