@@ -14,12 +14,12 @@ class Logic:
 	version = 'v1'
 
 	def __init__(self, logic=None):
-		self.logic = logic or current_app.config['LOGIC_URI']
+		self.logic = logic
 
 	def call(self, method, obj, data, func=None):
 		"""Assemble URI and make request"""
 		uri = '{logic}/api/{v}/{obj}'.format(
-			logic=self.logic,
+			logic=self.logic or current_app.config['LOGIC_URI'],
 			v=self.version,
 			obj=obj.__class__.__name__.lower())
 		if hasattr(obj, 'id'):
