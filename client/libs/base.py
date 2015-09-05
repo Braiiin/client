@@ -13,7 +13,7 @@ class Logic:
 	response = None
 	version = 'v1'
 
-	def __init__(logic=None):
+	def __init__(self, logic=None):
 		self.logic = logic or current_app.config['LOGIC_URI']
 
 	def call(self, method, obj, data, func=None):
