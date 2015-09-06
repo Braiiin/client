@@ -119,7 +119,8 @@ class Entity:
 
     def get(self):
         """Get object"""
-        self.call('get')
+        if not self.call('get'):
+            return None
         return self
 
     def fetch(self):
